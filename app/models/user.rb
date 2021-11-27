@@ -2,6 +2,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
+
+  validates :name, :rut, :alias, :bank, :account_number, :account_type, presence: true
 end
 
 # == Schema Information
@@ -16,6 +18,12 @@ end
 #  remember_created_at    :datetime
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  name                   :string           not null
+#  rut                    :string           not null
+#  bank                   :string           not null
+#  account_number         :integer          not null
+#  account_type           :string           not null
+#  alias                  :string           not null
 #
 # Indexes
 #
