@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Set up Rails app. Run this script immediately after cloning the codebase.
+# https://la-guia.platan.us/code/rails.html#getting-started
+
+# Exit if any subcommand fails
+set -e
+
+# Set up Ruby dependencies via Bundler
+gem install bundler --conservative
+bundle check || bundle install
+
+# Install javascript dependencies
+bin/yarn install
+
+# Set up required services
+docker-compose up -d
+
+# Set up database
+bin/rails db:setup
+
+# Add binstubs to PATH via export PATH=".git/safe/../../bin:$PATH" in ~/.zshenv
+mkdir -p .git/safe
+

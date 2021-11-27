@@ -1,0 +1,134 @@
+version: 2.1
+
+ruby-image: &ruby-image circleci/ruby:2.7
+postgres-image: &postgres-image postgres:11.3
+redis-image: &redis-image redis
+env-vars: &env-vars
+  BUNDLE_JOBS: 4
+  BUNDLE_PATH: vendor/bundle
+  RAILS_ENV: test
+
+executors:
+  test-executor:
+    docker:
+      - image: *ruby-image
+        environment: *env-vars
+      - image: *postgres-image
+      - image: *redis-image
+
+  lint-executor:
+    docker:
+      - image: *ruby-image
+        environment: *env-vars
+
+commands:
+  setup:
+    description: checkout code, restore cache, install dependencies, save cache
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - bundle-dependencies-{{ checksum "Gemfile.lock" }}
+          - bundle-dependencies-
+
+      - restore_cache:
+          keys:
+          - yarn-dependencies-{{ checksum "yarn.lock" }}
+          - yarn-dependencies-
+
+      - run:
+          name: Install bundle dependencies
+          command: |
+            BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")
+            gem install bundler:$BUNDLER_VERSION
+            bundle _$(echo $BUNDLER_VERSION)_ install
+
+      - run:
+          name: Install yarn dependencies
+          command: |
+            curl -sL https://deb.nodesource.com/setup_$(cat .node-version).x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            curl -o- -sL https://yarnpkg.com/install.sh | bash
+            sudo ln -s $HOME/.yarn/bin/yarn /usr/local/bin/yarn
+            yarn install --frozen-lockfile
+
+      - save_cache:
+          key: bundle-dependencies-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - save_cache:
+          key: yarn-dependencies-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+
+jobs:
+  test:
+    executor: test-executor
+    steps:
+      - setup
+
+      - run:
+          name: Wait for redis service
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
+      - run:
+          name: Wait for postgres service
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - run:
+          name: Setup database
+          command: bundle exec rails db:create db:schema:load
+
+      - run:
+          name: Run rspec
+          command: |
+            RSPEC_JUNIT_ARGS="-r rspec_junit_formatter -f RspecJunitFormatter -o test_results/rspec.xml"
+            RSPEC_FORMAT_ARGS="-f progress --no-color -p 10"
+            bundle exec rspec spec $RSPEC_FORMAT_ARGS $RSPEC_JUNIT_ARGS
+
+
+      - store_test_results:
+          path: test_results
+
+  lint:
+    executor: lint-executor
+    steps:
+      - setup
+
+      - run:
+          name: Install reviewdog
+          command: |
+            curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b ./bin
+
+      - run:
+          name: Get files to lint
+          command: git diff origin/master --name-only --diff-filter=d > tmp/files_to_lint
+
+      - run:
+          name: Run rubocop
+          shell: /bin/bash
+          command: |
+            cat tmp/files_to_lint | grep -E '.+\.(rb)$' | xargs bundle exec rubocop --force-exclusion \
+            | ./bin/reviewdog -reporter=github-pr-review -f=rubocop
+
+      - run:
+          name: Run eslint
+          shell: /bin/bash
+          command: |
+            cat tmp/files_to_lint | grep -E '.+\.(js|jsx|vue)$' | xargs yarn run eslint \
+            | ./bin/reviewdog -reporter=github-pr-review -f=eslint
+
+      - run:
+          name: Run stylelint
+          shell: /bin/bash
+          command: |
+            cat tmp/files_to_lint | grep -E '.+\.(scss|css|less)$' | xargs yarn run stylelint \
+            | ./bin/reviewdog -reporter=github-pr-review -f=stylelint
+
+workflows:
+  test_and_lint:
+    jobs:
+      - test
+      - lint:
+          context: org-global

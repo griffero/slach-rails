@@ -1,0 +1,8 @@
+development: &default
+  url: <%= ENV.fetch("REDIS_URL") %>
+
+test:
+  <<: *default
+
+production: &deploy
+  url: <%= ENV.fetch("REDIS_URL", "") %>
