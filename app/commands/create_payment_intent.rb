@@ -2,13 +2,13 @@ class CreatePaymentIntent < PowerTypes::Command.new(:user, :amount)
   FINTOC_URL = 'https://api.fintoc.com/v1/payment_intents'
 
   def perform
-    post_payment_intent
+    post_payment_intent['widget_token']
   end
 
   private
 
   def payment_intent
-    @payment_intent ||= PaymentIntent.create(
+    @payment_intent ||= PaymentIntent.create!(
       user_id: @user.id,
       amount: @amount,
       recipient_account_holder_id: @user.rut,
@@ -33,6 +33,6 @@ class CreatePaymentIntent < PowerTypes::Command.new(:user, :amount)
       "Authorization": ENV.fetch('FINTOC_SK_LIVE'),
       "Content-Type": 'application/json'
     }
-    HTTParty.post(FINTOC_URL, data, headers: headers)
+    HTTParty.post(FINTOC_URL, query: data, headers: headers)
   end
 end
