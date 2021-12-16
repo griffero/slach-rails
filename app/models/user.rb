@@ -15,11 +15,16 @@ class User < ApplicationRecord
   include Hashid::Rails
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
+  devise :registerable, :recoverable, :rememberable
 
   has_many :payment_intents
 
+  validates :email, uniqueness: true
+  validates :rut, uniqueness: true
+  validates :alias, uniqueness: true
+
   validates :name, :rut, :alias, :bank, :account_number, :account_type, presence: true
+  validates :alias, format: { without: /\s/, message: 'must contain no spaces' }
 
   enum account_type: ACCOUNT_TYPES
   enum bank: BANKS
