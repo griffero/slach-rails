@@ -18,9 +18,7 @@ class User < ApplicationRecord
   devise :registerable, :recoverable, :rememberable
 
   has_many :payment_intents
-
-  validates :email, uniqueness: true
-  validates :rut, uniqueness: true
+  validates :rut, uniqueness: { scope: [ :bank, :email ] }
   validates :alias, uniqueness: true
 
   validates :name, :rut, :alias, :bank, :account_number, :account_type, presence: true
