@@ -15,10 +15,10 @@ class User < ApplicationRecord
   include Hashid::Rails
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :registerable, :recoverable, :rememberable
+  devise :registerable, :confirmable
 
   has_many :payment_intents
-  validates :rut, uniqueness: { scope: [ :bank, :email ] }
+  validates :rut, uniqueness: { scope: [:bank, :email] }
   validates :alias, uniqueness: true
 
   validates :name, :rut, :alias, :bank, :account_number, :account_type, presence: true
