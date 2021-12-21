@@ -24,7 +24,6 @@ gem 'scout_apm'
 gem 'send_grid_mailer'
 gem 'sidekiq'
 gem 'sidekiq-scheduler', '>= 3.0.1'
-gem 'strong_migrations'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
 
