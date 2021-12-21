@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_27_180413) do
+ActiveRecord::Schema.define(version: 2021_12_21_145726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 2021_11_27_180413) do
     t.string "name", null: false
     t.string "rut", null: false
     t.string "bank", null: false
-    t.integer "account_number", null: false
+    t.bigint "account_number", null: false
     t.string "account_type", null: false
     t.string "alias", null: false
     t.index ["email"], name: "index_users_on_email", unique: true

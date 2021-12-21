@@ -45,7 +45,7 @@ end
 #  name                   :string           not null
 #  rut                    :string           not null
 #  bank                   :string           not null
-#  account_number         :integer          not null
+#  account_number         :bigint(8)        not null
 #  account_type           :string           not null
 #  alias                  :string           not null
 #
