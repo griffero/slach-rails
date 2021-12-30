@@ -1,4 +1,5 @@
 Rails.application.configure do
+  config.hosts << "9f68-168-196-203-222.ngrok.io"
   config.active_job.queue_adapter = :async
   config.action_mailer.delivery_method = :sendgrid_dev
   Rails.application.config.action_mailer.sendgrid_dev_settings = {
