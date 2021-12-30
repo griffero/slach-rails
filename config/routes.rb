@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     api_version(module: 'Api::V1', path: { value: 'v1' }, defaults: { format: 'json' }) do
       resources :users, only: [:index, :show, :create]
       resources :payment_intents, only: [:create]
+      post 'fintoc/:id/webhook', to: 'fintoc#webhook'
+      post 'session', to: 'session#create'
+      get 'session/:id', to: 'session#show'
     end
   end
   mount Rswag::Api::Engine => '/api-docs'
