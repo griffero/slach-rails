@@ -10,7 +10,10 @@ class User < ApplicationRecord
     cl_banco_bice: 'cl_banco_bice',
     cl_banco_scotiabank: 'cl_banco_scotiabank',
     cl_banco_bci: 'cl_banco_bci',
-    cl_banco_estado: 'cl_banco_estado'
+    cl_banco_estado: 'cl_banco_estado',
+    cl_banco_security: 'cl_banco_security',
+    cl_banco_ripley: 'cl_banco_ripley',
+    cl_banco_falabella: 'cl_banco_falabella'
   }
   include Hashid::Rails
   # Include default devise modules. Others available are:
