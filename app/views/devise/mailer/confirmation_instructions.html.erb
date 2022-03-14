@@ -1,5 +1,15 @@
-<p>Bienvenido a Slach <%= @resource.name %>!</p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Bienvenido a Slach <%= @resource.name %>!</p>
 
-<p>Para empezar a usar Slach debes confirmar el mail. Lo debes hacer con el siguiente link:</p>
+    <p>Para empezar a usar Slach debes confirmar el mail. Lo debes hacer con el siguiente link:</p>
 
-<p><%= link_to 'Confirmar mi cuenta de Slach', confirmation_url(@resource, confirmation_token: @token) %></p>
+    <p><%= link_to 'Confirmar mi cuenta de Slach', confirmation_url(@resource, confirmation_token: @token) %></p>
+
+    <p>Saludos!</p>
+  </body>
+</html>
