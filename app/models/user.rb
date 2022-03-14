@@ -29,6 +29,12 @@ class User < ApplicationRecord
 
   enum account_type: ACCOUNT_TYPES
   enum bank: BANKS
+
+  private
+
+  def after_confirmation
+    UserMailer.welcome_email(self).deliver
+  end
 end
 
 # == Schema Information
