@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   scope path: '/api' do
     api_version(module: 'Api::V1', path: { value: 'v1' }, defaults: { format: 'json' }) do
-      resources :users, only: [:index, :show, :create]
+      resources :users, only: [:index, :create]
+      get 'users/:id', to: 'users#show', constraints: { id: /[^\/?]+/ }
       resources :payment_intents, only: [:create]
       post 'fintoc/:id/webhook', to: 'fintoc#webhook'
       post 'session', to: 'session#create'

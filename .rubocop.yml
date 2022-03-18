@@ -22,6 +22,8 @@ Layout/ParameterAlignment:
   - with_fixed_indentation
 Metrics/BlockLength:
   Enabled: false
+Style/RegexpLiteral:
+  Enabled: false
 Style/ClassAndModuleChildren:
   Description: Checks style of children classes and modules.
   Enabled: false
