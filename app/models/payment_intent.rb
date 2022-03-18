@@ -1,8 +1,12 @@
 class PaymentIntent < ApplicationRecord
+  FINISHED_STATUSES = ['unknown', 'expired', 'failed', 'rejected', 'succeeded']
+
   belongs_to :user
 
   validates :amount, :recipient_account_holder_id, :recipient_account_number,
             :recipient_account_type, :recipient_account_institution_id, presence: true
+
+  scope :pending, -> { where.not(payment_status: FINISHED_STATUSES) }
 end
 
 # == Schema Information
