@@ -18,6 +18,7 @@ end
 #  recipient_account_institution_id :string           not null
 #  created_at                       :datetime         not null
 #  updated_at                       :datetime         not null
+#  payment_status                   :string
 #
 # Indexes
 #
