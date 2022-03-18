@@ -4,7 +4,7 @@ services:
   postgresql:
     image: postgres:11.3
     ports:
-    - 5432
+    - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ''
@@ -13,9 +13,9 @@ services:
   redis:
     image: redis
     ports:
-    - 6379
+    - 6379:6379
     volumes:
     - redis_data:/data
 volumes:
-  postgresql_data: 
-  redis_data: 
+  postgresql_data:
+  redis_data:
