@@ -2,7 +2,9 @@ class CreatePaymentIntent < PowerTypes::Command.new(:user, :amount)
   FINTOC_URL = 'https://api.fintoc.com/v1/payment_intents'
 
   def perform
-    post_payment_intent['widget_token']
+    response = post_payment_intent
+    payment_intent.update(fintoc_id: response['id'])
+    response['widget_token']
   end
 
   private

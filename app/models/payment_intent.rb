@@ -19,6 +19,7 @@ end
 #  created_at                       :datetime         not null
 #  updated_at                       :datetime         not null
 #  payment_status                   :string
+#  fintoc_id                        :string
 #
 # Indexes
 #

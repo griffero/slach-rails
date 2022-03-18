@@ -1,6 +1,5 @@
 class Api::V1::FintocController < Api::V1::BaseController
   skip_before_action :verify_authenticity_token
-  # FINTOC_API_KEY = ENV.fetch('FINTOC_API_KEY')
 
   def webhook
     username = params[:data][:username]
