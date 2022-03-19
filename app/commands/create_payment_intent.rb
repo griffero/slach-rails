@@ -13,6 +13,7 @@ class CreatePaymentIntent < PowerTypes::Command.new(:user, :amount)
     @payment_intent ||= PaymentIntent.create!(
       user_id: @user.id,
       amount: @amount,
+      payment_status: 'created',
       recipient_account_holder_id: @user.rut,
       recipient_account_number: @user.account_number,
       recipient_account_type: @user.account_type,
