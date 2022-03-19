@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+
+  <body>
+    <p>Hola <strong><%= @user.name.split(' ')[0] %></strong>!</p>
+
+    <p><%= @sender_name %> te pagó <%= Money.new(@payment_intent.amount, 'CLP').format %> usando <strong>Slach</strong></p>
+
+    <p>¡Saludos!</p>
+  </body>
+</html>
