@@ -11,9 +11,13 @@ Rails.application.routes.draw do
       get 'session/:id', to: 'session#show'
     end
   end
+
+  authenticate :admin_user do
+    mount Sidekiq::Web => '/queue'
+  end
+
   mount Rswag::Api::Engine => '/api-docs'
   mount Rswag::Ui::Engine => '/api-docs'
   devise_for :users, controllers: { confirmations: 'confirmations' }
-  mount Sidekiq::Web => '/queue'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
