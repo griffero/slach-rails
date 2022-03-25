@@ -20,7 +20,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :registerable, :confirmable
 
-  has_many :payment_intents
+  has_many :payment_intents, dependent: :nullify
   validates :rut, uniqueness: { scope: [:bank, :email] }
   validates :alias, uniqueness: true
 
